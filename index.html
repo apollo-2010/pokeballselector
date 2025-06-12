@@ -1,153 +1,113 @@
 <!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Starter Selector</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pokémon Starter Selector</title>
   <style>
-    html, body {
+    * {
+      image-rendering: pixelated;
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      height: 100%;
-      overflow: hidden;
-      image-rendering: pixelated;
-    }body {
-  background: url('images/darkgrass.png');
-  background-repeat: repeat;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.container {
-  position: relative;
-  width: 768px;
-  height: 576px;
-  background: url('images/bg.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-
-.bag {
-  position: absolute;
-  top: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 200px;
-  height: auto;
-  z-index: 2;
-}
-
-.balls {
-  position: absolute;
-  top: 300px;
-  left: 50%;
-  display: flex;
-  gap: 32px;
-  transform: translateX(-50%);
-  z-index: 3;
-}
-
-.ball {
-  width: 48px;
-  height: 40px;
-  background: url('images/ball.png') no-repeat;
-  background-size: 192px 40px;
-  image-rendering: pixelated;
-}
-
-.ball.selected {
-  animation: ballAnim 0.5s steps(4) infinite;
-}
-
-@keyframes ballAnim {
-  from { background-position: 0 0; }
-  to { background-position: -192px 0; }
-}
-
-.ball:nth-child(1) { margin-top: -8px; }
-.ball:nth-child(3) { margin-top: -8px; }
-
-.selector {
-  position: absolute;
-  width: 64px;
-  height: 84px;
-  background: url('images/sel.png') no-repeat;
-  background-size: 256px 84px;
-  image-rendering: pixelated;
-  animation: selectorAnim 0.6s steps(4) infinite;
-  top: 240px;
-  left: 0;
-  transition: left 0.2s ease;
-  z-index: 4;
-}
-
-@keyframes selectorAnim {
-  from { background-position: 0 0; }
-  to { background-position: -256px 0; }
-}
-
-.button {
-  position: absolute;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 6px 12px;
-  font-family: monospace;
-  background: #eee;
-  border: 1px solid #333;
-  cursor: pointer;
-  z-index: 5;
-}
-
-@media (max-width: 600px) {
-  .container {
-    transform: scale(0.9);
-    transform-origin: center top;
-  }
-
-  .balls {
-    top: 310px;
-  }
-
-  .selector {
-    top: 250px;
-  }
-
-  .bag {
-    width: 220px;
-  }
-}
-
+    }
+    body {
+      background: url('./images/darkgrass.png') repeat;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .stage-container {
+      position: relative;
+      width: 288px;
+      height: 192px;
+      background: url('./images/bg.png') no-repeat center;
+      background-size: contain;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      margin-bottom: 16px;
+    }
+    .bag {
+      width: 96px;
+      height: auto;
+      margin-top: 8px;
+    }
+    .balls {
+      position: relative;
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      width: 100%;
+      margin-top: 32px;
+    }
+    .ball {
+      width: 48px;
+      height: 40px;
+      background: url('./images/ball.png') no-repeat;
+      background-size: 192px 40px;
+    }
+    .ball.idle {
+      background-position-x: 0;
+    }
+    .ball.animate {
+      animation: animateBall 0.8s steps(4) infinite;
+    }
+    @keyframes animateBall {
+      from { background-position-x: 0; }
+      to { background-position-x: -192px; }
+    }
+    .selector {
+      position: absolute;
+      width: 64px;
+      height: 21px;
+      background: url('./images/sel.png') no-repeat;
+      background-size: 256px 84px;
+      top: 72px;
+      animation: animateSel 0.6s steps(4) infinite;
+    }
+    @keyframes animateSel {
+      from { background-position-x: 0; }
+      to { background-position-x: -256px; }
+    }
+    button {
+      margin-top: 12px;
+      font-size: 16px;
+      padding: 4px 12px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="stage-container">
+    <img class="bag" src="./images/bag.png" alt="Bag" />
     <div class="balls">
-      <div class="ball" id="ball0"></div>
-      <div class="ball" id="ball1"></div>
-      <div class="ball" id="ball2"></div>
-      <div class="selector" id="selector"></div>
+      <div class="ball idle" id="ball0"></div>
+      <div class="ball idle" id="ball1"></div>
+      <div class="ball idle" id="ball2"></div>
     </div>
-    <img src="images/bag.png" alt="Bag" class="bag">
-    <div class="button" onclick="selectRandom()">Pick Starter</div>
-  </div>  <script>
+    <div class="selector" id="selector"></div>
+  </div>
+  <button onclick="selectRandomBall()">Pick Starter</button>
+  <script>
     const balls = document.querySelectorAll('.ball');
     const selector = document.getElementById('selector');
-    let currentIndex = 0;
-
-    function selectRandom() {
-      balls[currentIndex].classList.remove('selected');
-      let newIndex;
-      do {
-        newIndex = Math.floor(Math.random() * balls.length);
-      } while (newIndex === currentIndex);
-      currentIndex = newIndex;
-      balls[currentIndex].classList.add('selected');
-      selector.style.left = `${currentIndex * 80}px`;
+    const ballOffsets = [24, 120, 216]; // approximate positions above ballsfunction selectRandomBall() {
+  const index = Math.floor(Math.random() * balls.length);
+  balls.forEach((ball, i) => {
+    if (i === index) {
+      ball.classList.remove('idle');
+      ball.classList.add('animate');
+    } else {
+      ball.classList.remove('animate');
+      ball.classList.add('idle');
     }
+  });
+  selector.style.left = ballOffsets[index] + 'px';
+}
 
-    // set initial state
-    balls[currentIndex].classList.add('selected');
-    selector.style.left = `${currentIndex * 80}px`;
-  </script></body>
+  </script>
+</body>
 </html>
