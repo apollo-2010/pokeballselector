@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Starter Selector</title>
   <style>
     html, body {
@@ -93,6 +93,13 @@
   background: #eee;
   border: 1px solid #333;
   cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .container {
+    transform: scale(0.8);
+    transform-origin: top center;
+  }
 }
 
   </style>
