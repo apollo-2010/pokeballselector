@@ -1,80 +1,134 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pokéball Selector</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pokémon Emerald Starter Selector</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      background: #e0f7fa;
-      font-family: sans-serif;
+      background: #000;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      margin: 0;
-    }.container {
-  position: relative;
-  display: flex;
-  gap: 40px;
-  margin-bottom: 20px;
-}
+      image-rendering: pixelated;
+    }
 
-.pokeball {
-  width: 64px;
-  height: 64px;
-  image-rendering: pixelated;
-}
+    .screen {
+      position: relative;
+      width: 240px;
+      height: 160px;
+      background: url('https://raw.githubusercontent.com/apollo-2010/pokeballselector/main/images/bg.png') no-repeat center;
+      background-size: contain;
+      image-rendering: pixelated;
+    }
 
-.cursor {
-  position: absolute;
-  top: -40px;
-  width: 0;
-  height: 0;
-}
+    .bag {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 240px;
+      height: 160px;
+      background: url('https://raw.githubusercontent.com/apollo-2010/pokeballselector/main/images/bag.png') no-repeat center;
+      background-size: contain;
+      image-rendering: pixelated;
+      pointer-events: none;
+    }
 
-.cursor::before {
-  content: "☞";
-  font-size: 32px;
-  line-height: 1;
-  color: #fff;
-  text-shadow: 
-    1px 1px 0 #000,
-    -1px 1px 0 #000,
-    1px -1px 0 #000,
-    -1px -1px 0 #000;
-  transition: transform 0.3s ease, left 0.3s ease;
-  position: absolute;
-  transform: scale(1.2);
-}
-    
-button {
-  padding: 10px 20px;
-  font-size: 1rem;
-  cursor: pointer;
-}
+    .pokeball {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      background: url('https://raw.githubusercontent.com/apollo-2010/pokeballselector/main/images/ball.png') no-repeat;
+      background-size: 128px 32px;
+      image-rendering: pixelated;
+    }
 
+    .pokeball.idle {
+      background-position: 0 0;
+    }
+
+    .pokeball.animate {
+      animation: bounce 0.6s steps(4) infinite;
+    }
+
+    @keyframes bounce {
+      0%   { background-position: 0 0; }
+      25%  { background-position: -32px 0; }
+      50%  { background-position: -64px 0; }
+      75%  { background-position: -96px 0; }
+      100% { background-position: 0 0; }
+    }
+
+    .selector {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      background: url('https://raw.githubusercontent.com/apollo-2010/pokeballselector/main/images/sel.png') no-repeat;
+      background-size: 128px 32px;
+      image-rendering: pixelated;
+      animation: point 0.6s steps(4) infinite;
+      top: 28px;
+    }
+
+    @keyframes point {
+      from { background-position: 0 0; }
+      to   { background-position: -96px 0; }
+    }
+
+    button {
+      position: absolute;
+      bottom: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 6px 12px;
+      font-family: monospace;
+      font-size: 14px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
-  <script src="pokeball-selector.js"></script>
-  <div class="container">
-    <div class="cursor" id="cursor"></div>
-    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" class="pokeball">
-    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" class="pokeball">
-    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" class="pokeball">
+  <div class="screen">
+    <div class="bag"></div>
+
+    <div class="pokeball idle" id="ball0" style="left: 32px; top: 96px;"></div>
+    <div class="pokeball idle" id="ball1" style="left: 104px; top: 96px;"></div>
+    <div class="pokeball idle" id="ball2" style="left: 176px; top: 96px;"></div>
+
+    <div class="selector" id="selector" style="left: 32px;"></div>
+
+    <button onclick="selectRandomBall()">Pick a Pokéball</button>
   </div>
-  <button onclick="selectRandomPokeball()">Pick a Pokéball</button>  <script>
-    function selectRandomPokeball() {
-      const cursor = document.getElementById('cursor');
-      const balls = document.querySelectorAll('.pokeball');
-      const index = Math.floor(Math.random() * balls.length);
-      const target = balls[index];
-      const container = document.querySelector('.container');
-      const containerRect = container.getBoundingClientRect();
-      const targetRect = target.getBoundingClientRect();
-      const leftPos = targetRect.left - containerRect.left + (targetRect.width / 2) - 16;
-      cursor.style.left = `${leftPos}px`;
+
+  <script>
+    const selector = document.getElementById("selector");
+    const balls = [0, 1, 2].map(i => document.getElementById(`ball${i}`));
+    const positions = [32, 104, 176];
+
+    function selectRandomBall() {
+      const selected = Math.floor(Math.random() * balls.length);
+
+      // move selector
+      selector.style.left = positions[selected] + "px";
+
+      // animate the selected ball only
+      balls.forEach((ball, index) => {
+        if (index === selected) {
+          ball.classList.remove("idle");
+          ball.classList.add("animate");
+        } else {
+          ball.classList.remove("animate");
+          ball.classList.add("idle");
+        }
+      });
     }
-  </script></body>
+  </script>
+</body>
 </html>
