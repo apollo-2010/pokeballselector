@@ -20,8 +20,8 @@
     }
     .stage-container {
       position: relative;
-      width: 288px;
-      height: 192px;
+      width: 384px;
+      height: 256px;
       background: url('./images/bg.png') no-repeat center;
       background-size: contain;
       display: flex;
@@ -31,7 +31,7 @@
       margin-bottom: 16px;
     }
     .bag {
-      width: 96px;
+      width: 120px;
       height: auto;
       margin-top: 8px;
     }
@@ -41,7 +41,8 @@
       justify-content: space-around;
       align-items: flex-end;
       width: 100%;
-      margin-top: 32px;
+      margin-top: 24px;
+      padding: 0 16px;
     }
     .ball {
       width: 48px;
@@ -55,29 +56,33 @@
     .ball.animate {
       animation: animateBall 0.8s steps(4) infinite;
     }
-    @keyframes animateBall {
-      from { background-position-x: 0; }
-      to { background-position-x: -192px; }
-    }
-    .selector {
-      position: absolute;
-      width: 64px;
-      height: 21px;
-      background: url('./images/sel.png') no-repeat;
-      background-size: 256px 84px;
-      top: 72px;
-      animation: animateSel 0.6s steps(4) infinite;
-    }
-    @keyframes animateSel {
-      from { background-position-x: 0; }
-      to { background-position-x: -256px; }
-    }
-    button {
-      margin-top: 12px;
-      font-size: 16px;
-      padding: 4px 12px;
-      cursor: pointer;
-    }
+    .ball:nth-child(1) { margin-top: -8px; }
+    .ball:nth-child(2) { margin-top: 0px; }
+    .ball:nth-child(3) { margin-top: -8px; }@keyframes animateBall {
+  from { background-position-x: 0; }
+  to { background-position-x: -192px; }
+}
+.selector {
+  position: absolute;
+  width: 64px;
+  height: 21px;
+  background: url('./images/sel.png') no-repeat;
+  background-size: 256px 84px;
+  top: 100px;
+  animation: animateSel 0.6s steps(4) infinite;
+  pointer-events: none;
+}
+@keyframes animateSel {
+  from { background-position-x: 0; }
+  to { background-position-x: -256px; }
+}
+button {
+  margin-top: 12px;
+  font-size: 16px;
+  padding: 4px 12px;
+  cursor: pointer;
+}
+
   </style>
 </head>
 <body>
@@ -93,8 +98,9 @@
   <button onclick="selectRandomBall()">Pick Starter</button>
   <script>
     const balls = document.querySelectorAll('.ball');
-    const selector = document.getElementById('selector');
-    const ballOffsets = [24, 120, 216]; // approximate positions above ballsfunction selectRandomBall() {
+    const selector = document.getElementById('selector');const ballOffsets = [48, 160, 272];
+
+function selectRandomBall() {
   const index = Math.floor(Math.random() * balls.length);
   balls.forEach((ball, i) => {
     if (i === index) {
