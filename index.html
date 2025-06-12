@@ -23,19 +23,19 @@
 
     .container {
       position: relative;
-      width: 640px;
-      height: 427px; /* 3:2 ratio to show more bg.png */
+      width: 768px;
+      height: 512px;
       background: url('images/bg.png') no-repeat center;
-      background-size: contain;
+      background-size: cover;
       image-rendering: pixelated;
     }
 
     .bag {
       position: absolute;
-      top: 64px;
-      left: 240px;
-      width: 160px;
-      height: 96px;
+      top: 80px;
+      left: 300px;
+      width: 180px;
+      height: 108px;
       background: url('images/bag.png') no-repeat center;
       background-size: contain;
       image-rendering: pixelated;
@@ -51,9 +51,9 @@
       image-rendering: pixelated;
     }
 
-    .ball:nth-child(2) { left: 160px; top: 280px; }
-    .ball:nth-child(3) { left: 304px; top: 280px; }
-    .ball:nth-child(4) { left: 448px; top: 280px; }
+    .ball#ball0 { left: 180px; top: 340px; }
+    .ball#ball1 { left: 330px; top: 350px; }
+    .ball#ball2 { left: 490px; top: 330px; }
 
     .selector {
       position: absolute;
@@ -62,7 +62,7 @@
       background: url('images/sel.png') no-repeat;
       background-size: 96px 32px;
       image-rendering: pixelated;
-      animation: selectorAnim 0.5s steps(3) infinite;
+      animation: selectorAnim 0.6s steps(3) infinite;
       pointer-events: none;
     }
 
@@ -91,7 +91,7 @@
 
     button {
       position: absolute;
-      bottom: -50px;
+      bottom: -60px;
       left: 50%;
       transform: translateX(-50%);
       padding: 8px 16px;
@@ -119,9 +119,9 @@
     ];
     const selector = document.getElementById('selector');
     const positions = [
-      { left: 160, top: 280 },
-      { left: 304, top: 280 },
-      { left: 448, top: 280 }
+      { left: 180, top: 340 },
+      { left: 330, top: 350 },
+      { left: 490, top: 330 }
     ];
 
     function selectRandomBall() {
@@ -139,7 +139,7 @@
       selector.style.top = `${positions[i].top - 32}px`;
     }
 
-    selectRandomBall(); // auto-run on load
+    selectRandomBall(); // run on load
   </script>
 </body>
 </html>
