@@ -29,7 +29,7 @@
 
 .bag {
   position: absolute;
-  top: 40px;
+  top: 36px;
   left: 50%;
   transform: translateX(-50%);
   width: 144px;
@@ -38,7 +38,7 @@
 
 .balls {
   position: absolute;
-  top: 200px;
+  top: 230px;
   left: 50%;
   display: flex;
   gap: 32px;
@@ -62,8 +62,8 @@
   to { background-position: -192px 0; }
 }
 
-.ball:nth-child(1) { margin-top: -10px; }
-.ball:nth-child(3) { margin-top: -10px; }
+.ball:nth-child(1) { margin-top: -8px; }
+.ball:nth-child(3) { margin-top: -8px; }
 
 .selector {
   position: absolute;
@@ -73,9 +73,10 @@
   background-size: 256px 84px;
   image-rendering: pixelated;
   animation: selectorAnim 0.6s steps(4) infinite;
-  top: 128px;
+  top: 180px;
   left: 0;
   transition: left 0.2s ease;
+  z-index: 5;
 }
 
 @keyframes selectorAnim {
