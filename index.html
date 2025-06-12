@@ -23,8 +23,8 @@
 
     .container {
       position: relative;
-      width: 480px;
-      height: 320px;
+      width: 640px;
+      height: 427px; /* 3:2 ratio to show more bg.png */
       background: url('images/bg.png') no-repeat center;
       background-size: contain;
       image-rendering: pixelated;
@@ -32,8 +32,8 @@
 
     .bag {
       position: absolute;
-      top: 32px;
-      left: 160px;
+      top: 64px;
+      left: 240px;
       width: 160px;
       height: 96px;
       background: url('images/bag.png') no-repeat center;
@@ -51,9 +51,9 @@
       image-rendering: pixelated;
     }
 
-    .ball:nth-child(2) { left: 100px; top: 200px; }
-    .ball:nth-child(3) { left: 224px; top: 200px; }
-    .ball:nth-child(4) { left: 348px; top: 200px; }
+    .ball:nth-child(2) { left: 160px; top: 280px; }
+    .ball:nth-child(3) { left: 304px; top: 280px; }
+    .ball:nth-child(4) { left: 448px; top: 280px; }
 
     .selector {
       position: absolute;
@@ -119,9 +119,9 @@
     ];
     const selector = document.getElementById('selector');
     const positions = [
-      { left: 100, top: 200 },
-      { left: 224, top: 200 },
-      { left: 348, top: 200 }
+      { left: 160, top: 280 },
+      { left: 304, top: 280 },
+      { left: 448, top: 280 }
     ];
 
     function selectRandomBall() {
@@ -135,13 +135,11 @@
         }
       });
 
-      // move selector above the selected ball
       selector.style.left = `${positions[i].left}px`;
-      selector.style.top = `${positions[i].top - 32}px`; // hover above ball
+      selector.style.top = `${positions[i].top - 32}px`;
     }
 
-    // run on load
-    selectRandomBall();
+    selectRandomBall(); // auto-run on load
   </script>
 </body>
 </html>
